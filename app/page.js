@@ -6,7 +6,8 @@ import { NotesClient } from "@/components/NotesClient";
 
 async function getNotes() {
   await dbConnect();
-  const notes = await Note.find({}).sort({ createdAt: -1 }).lean();
+  const rawnotes = await Note.find({}).sort({ createdAt: -1 }).lean();
+  const notes = JSON.parse(JSON.stringify(rawnotes));
 
   return notes.map((note) => ({
     ...note,
