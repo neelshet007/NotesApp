@@ -1,0 +1,21 @@
+import dbConnect from "@/lib/db";
+import Note from "@/models/Note";
+import { NextResponse } from "next/server";
+
+export async function DELETE(request, { params }) {
+    await dbConnect();
+    try {
+        const { id } = await params;
+        await Note.findByIdAndDelete(id);
+
+
+        if (!note) {
+            return NextResponse.json({ success: false, error: "Note not found" }, { status: 404 });
+        }
+
+        return NextResponse.json({ success: true, data: {} });
+    } catch (error) {
+        console.log(error);
+        return NextResponse.json({ success: false });
+    }
+}

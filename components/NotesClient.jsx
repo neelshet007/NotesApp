@@ -36,6 +36,21 @@ export const NotesClient = ({ initialNotes }) => {
             toast.error("Failed to create note")
         }
     }
+    const deleteNote = async (id) => {
+        try {
+            const response = await fetch(`/api/notes/${id}`, {
+                method: "DELETE",
+            });
+            const result = await response.json();
+            if (result.success) {
+                setNotes(notes.filter((note) => note._id !== id));
+                toast.success("Note deleted successfully");
+            }
+        } catch (error) {
+            console.log(error);
+            toast.error("Failed to delete note");
+        }
+    };
     return (
         <div className='space-y-6'>
             <form onSubmit={createNote} className="bg-white p-6 rounded-lg shadow-md" action="">
@@ -66,8 +81,8 @@ export const NotesClient = ({ initialNotes }) => {
                                 <div className='flex justify-between items-start mb-2'>
                                     <h3 className='text-lg font-semibold'>{note.title}</h3>
                                     <div className="flex gap-2">
-                                        <button type="button" className='text-blue-500 hover:text-blue-700 text-sm'>Edit</button>
-                                        <button type="button" className='text-red-500 hover:text-red-700 text-sm'>Delete</button>
+                                        <button className='text-blue-500 hover:text-blue-700 text-sm'>Edit</button>
+                                        <button onClick={() => deleteNote(note._id)} className='text-red-500 hover:text-red-700 text-sm'>Delete</button>
                                     </div>
                                 </div>
                                 <p className='text-gray-700 mb-2'>{note.content}</p>
